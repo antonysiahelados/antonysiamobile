@@ -66,11 +66,24 @@
 
   function ars(n) { return "$" + (n || 0).toLocaleString("es-AR"); }
 
-  function cerrado(date) { var d = (date || new Date()).getDay(); return d === 1 || d === 2 || d === 3; }
+  /* Reconstruye la hora de Argentina como Date local, así el día de la semana
+     no depende del huso horario del dispositivo de quien visita el sitio. */
+  function argNow(base) {
+    var parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Argentina/Buenos_Aires",
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
+    }).formatToParts(base || new Date());
+    var o = {};
+    parts.forEach(function (p) { o[p.type] = p.value; });
+    return new Date(o.year, o.month - 1, o.day, o.hour === "24" ? 0 : o.hour, o.minute, o.second);
+  }
+
+  function cerrado(date) { var d = argNow(date).getDay(); return d === 1 || d === 2 || d === 3; }
 
   /* Próximos días abiertos (jue, vie, sáb, dom) a partir de hoy. */
   function proximosDias(date) {
-    var hoy = date || new Date(), out = [];
+    var hoy = argNow(date), out = [];
     for (var i = 1; i <= 7 && out.length < 4; i++) {
       var f = new Date(hoy.getTime() + i * 86400000), dow = f.getDay();
       if (dow >= 4 || dow === 0) {
@@ -103,30 +116,34 @@
     return s + costoEnvio(s);
   }
 
-  /* Mismo formato de mensaje que el sitio actual, extendido a varios potes. */
+  /* Mensaje de WhatsApp: se arma en texto plano y se codifica al final,
+     asi los emojis y las tildes llegan bien a la app. */
   function mensajeWhatsApp(o) {
-    var m = "👋 ¡Hola Antonysia! Quiero confirmar el siguiente pedido:%0A%0A";
+    var L = [];
+    L.push("\u{1F44B} ¡Hola Antonysia! Quiero confirmar el siguiente pedido:", "");
     o.potes.forEach(function (p, i) {
-      m += "🍧 *Pote " + (i + 1) + ":* " + p.label + "%0A";
-      p.flavors.forEach(function (f) { m += "  • " + f + "%0A"; });
+      L.push("\u{1F367} *Pote " + (i + 1) + ":* " + p.label);
+      p.flavors.forEach(function (f) { L.push("   • " + f); });
     });
     if (o.cucu || o.vasitos) {
-      m += "%0A➕ *Adicionales:*%0A";
-      if (o.cucu) m += "  • Pack 4 cucuruchos crocantes (+" + ars(CONFIG.cucuruchos) + ")%0A";
-      if (o.vasitos) m += "  • Vasitos y cucharitas extra (gratis)%0A";
+      L.push("", "\u2795 *Adicionales:*");
+      if (o.cucu) L.push("   • Pack 4 cucuruchos crocantes (+" + ars(CONFIG.cucuruchos) + ")");
+      if (o.vasitos) L.push("   • Vasitos y cucharitas extra (gratis)");
     }
     var sub = subtotal(o.potes) + (o.cucu ? CONFIG.cucuruchos : 0) - (o.descuento || 0);
     var env = costoEnvio(sub);
-    if (o.promoLabel) m += "%0A🏷️ *Promo:* " + o.promoLabel + " (–" + ars(o.descuento) + ")%0A";
-    m += "%0A🛵 *Envío:* " + (env ? ars(env) : "Bonificado") + "%0A";
-    m += "💰 *Total:* " + ars(sub + env) + "%0A";
-    m += "👤 *Cliente:* " + (o.nombre || "A coordinar") + "%0A";
-    m += "📍 *Dirección de entrega:* " + o.dir + "%0A";
-    m += "💳 *Método de pago:* " + o.pagoTexto + "%0A";
-    if (o.dia) m += "📅 *Entrega programada:* " + o.dia + "%0A";
-    if (o.notas) m += "📝 *Aclaraciones:* " + o.notas + "%0A";
-    m += "%0A¿Me confirman recepción y tiempo estimado? ¡Gracias!";
-    return "https://wa.me/" + CONFIG.whatsapp + "?text=" + m;
+    L.push("");
+    if (o.promoLabel) L.push("\u{1F3F7} *Promo:* " + o.promoLabel + " (-" + ars(o.descuento) + ")");
+    L.push("\u{1F6F5} *Envío:* " + (env ? ars(env) : "Bonificado"));
+    L.push("\u{1F4B0} *Total:* " + ars(sub + env));
+    L.push("");
+    L.push("\u{1F464} *Cliente:* " + (o.nombre || "A coordinar"));
+    L.push("\u{1F4CD} *Dirección:* " + o.dir);
+    L.push("\u{1F4B3} *Pago:* " + o.pagoTexto);
+    if (o.dia) L.push("\u{1F4C5} *Entrega programada:* " + o.dia);
+    if (o.notas) L.push("\u{1F4DD} *Aclaraciones:* " + o.notas);
+    L.push("", "¿Me confirman recepción y tiempo estimado? ¡Gracias!");
+    return "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(L.join("\n"));
   }
 
   window.ANTONYSIA = {

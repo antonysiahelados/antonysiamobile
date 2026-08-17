@@ -6,47 +6,13 @@
 <title>Antonysia Helados — Elaboración propia en Loma Hermosa</title>
 <meta name="description" content="Helados artesanales de elaboración propia en Loma Hermosa. Armá tu pote en tres pasos y te lo llevamos.">
 <meta name="theme-color" content="#005B93">
-<link rel="icon" href="Logo Instagram.jpg">
+<link rel="icon" href="favicon.png" type="image/png">
 <meta property="og:title" content="Antonysia Helados">
 <meta property="og:description" content="Elaboración propia. Armá tu pote y te lo llevamos.">
 <meta property="og:image" content="Logo Instagram.jpg">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        azul: { DEFAULT: "#005B93", dark: "#00426B", soft: "#EEF4F8", tint: "#E6F0F7" },
-        rojo: { DEFAULT: "#BF4646", dark: "#A33636" },
-        crema: "#EDDCC6", fondo: "#F5EAD8", tinta: "#201E1D",
-        verde: { 200: "#DCE7C8", 600: "#7A8A5E", 700: "#63724A", 800: "#4C5938" },
-        arena: { 100: "#F6EEE2", 200: "#EBDDC5", 300: "#DDCBAF", 600: "#7C7365", 700: "#645C50", 800: "#43403A" }
-      },
-      fontFamily: { display: ['Caprasimo', 'serif'], body: ['Figtree', 'system-ui', 'sans-serif'] }
-    }
-  }
-};
-</script>
-<style>
-  html, body { margin: 0; background: #005B93; }
-  body { font-family: Figtree, system-ui, sans-serif; color: #201E1D; -webkit-tap-highlight-color: transparent; }
-  a { color: #005B93; }
-  a:hover { color: #BF4646; }
-  #scroller { scroll-snap-type: y proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  #scroller::-webkit-scrollbar, .noscroll::-webkit-scrollbar { width: 0; height: 0; }
-  .noscroll { scrollbar-width: none; }
-  .snap { scroll-snap-align: start; }
-  *:focus-visible { outline: 2px solid #EDDCC6; outline-offset: 2px; }
-  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.09); } 100% { transform: scale(1); } }
-  @keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  @keyframes sheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .anim-pop { animation: pop .3s ease; }
-  .anim-rise { animation: rise .22s ease; }
-  .anim-sheet { animation: sheet .26s cubic-bezier(.22,.9,.3,1); }
-  .hidden { display: none !important; }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body class="font-body">
 
@@ -64,6 +30,20 @@ tailwind.config = {
       </div>
     </div>
 
+    <div id="avisoResume" class="hidden mt-[10px] rounded-[20px] bg-white/10 p-4 flex gap-3 items-start">
+      <span class="w-[34px] h-[34px] rounded-full bg-white/15 grid place-items-center shrink-0 text-crema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+      </span>
+      <div class="flex-1 flex flex-col gap-[3px]">
+        <strong class="text-[13.5px] font-bold leading-tight">Tenés un pedido a medio armar</strong>
+        <span class="text-[12px] leading-snug text-white/80">¿Seguimos donde lo dejaste?</span>
+        <div class="flex gap-2 mt-2">
+          <button type="button" id="btnResumeSeguir" class="py-2 px-4 rounded-full bg-crema text-azul-dark text-[11.5px] font-extrabold cursor-pointer border-0">Seguir pedido</button>
+          <button type="button" id="btnResumeNuevo" class="py-2 px-4 rounded-full bg-transparent text-white text-[11.5px] font-bold border-[1.5px] border-white/25 cursor-pointer">Empezar de cero</button>
+        </div>
+      </div>
+    </div>
+
     <img src="assets/antonysia-logotipo.png" alt="Antonysia Helados" class="w-[250px] h-auto block mt-[30px]">
 
     <h1 class="font-display text-[38px] leading-[1.06] mt-6 [text-wrap:pretty]">Helado de<br>elaboración<br><span class="text-crema">propia.</span></h1>
@@ -77,7 +57,7 @@ tailwind.config = {
 
     <!-- Promociones -->
     <div class="mt-5 rounded-[22px] overflow-hidden bg-rojo shadow-lg">
-      <button type="button" id="promoToggle" class="w-full flex items-center gap-[10px] p-4 bg-transparent border-0 cursor-pointer text-left text-white hover:bg-rojo-dark transition-colors">
+      <button type="button" id="promoToggle" aria-expanded="false" aria-controls="promoPanel" class="w-full flex items-center gap-[10px] p-4 bg-transparent border-0 cursor-pointer text-left text-white hover:bg-rojo-dark transition-colors">
         <span class="w-[26px] h-[26px] rounded-full bg-white/[.18] grid place-items-center shrink-0">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>
         </span>
@@ -87,10 +67,25 @@ tailwind.config = {
         </span>
         <span id="promoChevron" class="text-xs font-bold text-white/80">▼</span>
       </button>
-      <div id="promoPanel" class="hidden px-[10px] pb-[10px] grid gap-2 max-h-[230px] overflow-y-auto noscroll"></div>
+      <div id="promoPanel" class="hidden px-[10px] pb-[10px] grid gap-2 max-h-[230px] overflow-y-auto noscroll" role="region" aria-label="Promociones"></div>
     </div>
 
     <button type="button" id="btnEmpezar" class="mt-[10px] w-full py-[18px] border-0 rounded-full bg-rojo hover:bg-rojo-dark active:scale-[.98] transition text-white text-base font-extrabold cursor-pointer shadow-lg">Armar mi pote</button>
+
+    <div class="grid grid-cols-3 gap-2 mt-4">
+      <a href="https://wa.me/5491162419013" target="_blank" rel="noopener" class="flex flex-col items-center gap-[6px] py-3 rounded-[18px] bg-white/10 hover:bg-white/[.18] transition-colors no-underline text-crema">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8Z"></path></svg>
+        <span class="text-[11px] font-bold text-white">WhatsApp</span>
+      </a>
+      <a href="https://instagram.com/antonysiahelados_" target="_blank" rel="noopener" class="flex flex-col items-center gap-[6px] py-3 rounded-[18px] bg-white/10 hover:bg-white/[.18] transition-colors no-underline text-crema">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+        <span class="text-[11px] font-bold text-white">Instagram</span>
+      </a>
+      <a href="https://maps.google.com/?q=Gabino+Ezeiza+8679,+Loma+Hermosa" target="_blank" rel="noopener" class="flex flex-col items-center gap-[6px] py-3 rounded-[18px] bg-white/10 hover:bg-white/[.18] transition-colors no-underline text-crema">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span class="text-[11px] font-bold text-white">Cómo llegar</span>
+      </a>
+    </div>
 
     <div class="flex justify-center gap-4 mt-[14px]">
       <div class="flex items-center gap-[6px]"><span class="w-[19px] h-[19px] rounded-full bg-white/[.16] grid place-items-center text-[10px] font-extrabold text-crema">1</span><span class="text-[11px] font-semibold text-white/70">El pote</span></div>
@@ -124,16 +119,16 @@ tailwind.config = {
     <div class="grid gap-3">
       <label class="flex flex-col gap-[6px]">
         <span class="text-[11.5px] font-bold text-azul">Tu nombre</span>
-        <input id="fNombre" type="text" autocomplete="name" placeholder="Ej: Lautaro" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
+        <input id="fNombre" type="text" autocomplete="name" enterkeyhint="next" placeholder="Ej: Lautaro" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
       </label>
       <label class="flex flex-col gap-[6px]">
         <span class="text-[11.5px] font-bold text-azul">Dirección y localidad</span>
-        <input id="fDir" type="text" autocomplete="street-address" placeholder="Ej: Gabino Ezeiza 8679, Loma Hermosa" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
+        <input id="fDir" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Ej: Gabino Ezeiza 8679, Loma Hermosa" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
       </label>
       <div id="zonaWarn" class="hidden rounded-[18px] bg-arena-100 border-[1.5px] border-arena-300 py-3 px-[14px] text-[11.5px] font-medium leading-relaxed text-arena-800">No reconocimos esa localidad. Llegamos a Loma Hermosa, Tres de Febrero, San Martín, Caseros y Villa Bosch — si estás cerca, mandalo igual y lo vemos por WhatsApp.</div>
       <label class="flex flex-col gap-[6px]">
         <span class="text-[11.5px] font-bold text-azul">Aclaraciones <span class="font-normal text-arena-600">(opcional)</span></span>
-        <input id="fNotas" type="text" placeholder="Ej: timbre 2B / casa de rejas negras" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
+        <input id="fNotas" type="text" enterkeyhint="done" placeholder="Ej: timbre 2B / casa de rejas negras" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
       </label>
     </div>
 
@@ -146,12 +141,12 @@ tailwind.config = {
     <div class="mt-5">
       <span class="text-[11.5px] font-bold text-azul">¿Sumamos algo más?</span>
       <div class="grid gap-2 mt-[9px]">
-        <button type="button" id="btnCucu" class="flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left border-arena-300 bg-white">
+        <button type="button" id="btnCucu" aria-pressed="false" class="flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left border-arena-300 bg-white">
           <span data-mark class="w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 bg-arena-200 text-arena-600">+</span>
           <span class="flex-1 text-[12.5px] font-bold">Pack 4 cucuruchos crocantes</span>
           <span class="text-[12.5px] font-extrabold text-azul">+$1.500</span>
         </button>
-        <button type="button" id="btnVasitos" class="flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left border-azul bg-azul-tint">
+        <button type="button" id="btnVasitos" aria-pressed="true" class="flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left border-azul bg-azul-tint">
           <span data-mark class="w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 bg-azul text-white">✓</span>
           <span class="flex-1 text-[12.5px] font-bold">Vasitos y cucharitas extra</span>
           <span class="text-xs font-bold text-verde-700">Gratis</span>
@@ -175,14 +170,24 @@ tailwind.config = {
       <img src="assets/antonysia-logotipo.png" alt="Antonysia Helados" class="w-32 h-auto block">
     </button>
     <span class="flex-1"></span>
-    <span id="headerTotal" class="text-[11px] font-bold text-white/70"></span>
+    <div class="flex items-center gap-2 -mr-[6px]">
+      <a href="https://wa.me/5491162419013" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" class="w-11 h-11 rounded-full bg-white/[.12] hover:bg-white/25 transition-colors grid place-items-center text-crema">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8Z"></path></svg>
+      </a>
+      <a href="https://instagram.com/antonysiahelados_" target="_blank" rel="noopener" aria-label="Seguinos en Instagram" class="w-11 h-11 rounded-full bg-white/[.12] hover:bg-white/25 transition-colors grid place-items-center text-crema">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+      </a>
+      <a href="https://maps.google.com/?q=Gabino+Ezeiza+8679,+Loma+Hermosa" target="_blank" rel="noopener" aria-label="Cómo llegar" class="w-11 h-11 rounded-full bg-white/[.12] hover:bg-white/25 transition-colors grid place-items-center text-crema">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      </a>
+    </div>
   </div>
   <nav class="flex gap-[6px]" id="tabs"></nav>
 </header>
 
 <!-- Barra de pedido -->
 <div id="bar" class="hidden fixed left-[14px] right-[14px] bottom-[14px] z-30 rounded-[24px] bg-azul-dark text-white shadow-2xl overflow-hidden">
-  <button type="button" id="barToggle" class="w-full flex items-center gap-3 py-[14px] px-4 bg-transparent border-0 cursor-pointer text-left text-inherit">
+  <button type="button" id="barToggle" aria-expanded="false" aria-controls="barDetalle" class="w-full flex items-center gap-3 py-[14px] px-4 bg-transparent border-0 cursor-pointer text-left text-inherit">
     <span class="flex-1 flex flex-col gap-[2px]">
       <span id="barPotes" class="text-[13.5px] font-bold leading-tight">1 pote</span>
       <span id="barHint" class="text-[11px] font-medium leading-snug text-white/60"></span>
@@ -196,11 +201,11 @@ tailwind.config = {
 <!-- Hoja de pago -->
 <div id="pagoOverlay" class="hidden fixed inset-0 z-50 bg-[rgba(0,42,68,.5)]">
   <button type="button" id="pagoBackdrop" aria-label="Cerrar" class="absolute inset-0 w-full border-0 bg-transparent cursor-pointer"></button>
-  <div class="absolute left-0 right-0 bottom-0 max-h-[88%] flex flex-col bg-fondo rounded-t-[30px] anim-sheet shadow-2xl">
+  <div id="pagoSheet" role="dialog" aria-modal="true" aria-labelledby="pagoTitulo" class="absolute left-0 right-0 bottom-0 max-h-[88%] flex flex-col bg-fondo rounded-t-[30px] anim-sheet shadow-2xl">
     <div class="pt-[10px] pb-1 grid place-items-center shrink-0"><div class="w-[42px] h-1 rounded-full bg-arena-300"></div></div>
     <div class="pt-[6px] px-5 pb-3 flex items-baseline gap-[9px] shrink-0">
       <span class="text-[9.5px] font-extrabold tracking-[.16em] uppercase text-rojo">Paso 3 de 3</span>
-      <h2 class="font-display text-[23px] leading-tight text-azul m-0">¿Cómo abonás?</h2>
+      <h2 id="pagoTitulo" class="font-display text-[23px] leading-tight text-azul m-0">¿Cómo abonás?</h2>
     </div>
     <div class="flex-1 overflow-y-auto noscroll px-5 pb-4">
       <div id="pagos" class="grid gap-[9px]"></div>
@@ -224,7 +229,7 @@ tailwind.config = {
       </div>
       <label id="campoEfectivo" class="hidden mt-[14px] flex-col gap-[6px] anim-rise">
         <span class="text-[11.5px] font-bold text-azul">¿Con cuánto abonás?</span>
-        <input id="fCambio" type="text" placeholder="Ej: pago con $30.000" class="py-[13px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-[13.5px]">
+        <input id="fCambio" type="text" enterkeyhint="done" placeholder="Ej: pago con $30.000" class="py-[13px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-[13.5px]">
       </label>
       <div class="mt-4 rounded-[22px] bg-azul text-white p-[15px] grid gap-2">
         <div id="resumen" class="grid gap-2"></div>
@@ -244,11 +249,11 @@ tailwind.config = {
 
 <!-- Confirmación -->
 <div id="confirmOverlay" class="hidden fixed inset-0 z-[60] bg-[rgba(0,42,68,.6)] grid items-end">
-  <div class="bg-white rounded-t-[32px] pt-[26px] px-[22px] pb-6 anim-sheet">
+  <div id="confirmSheet" role="dialog" aria-modal="true" aria-labelledby="confirmTitulo" class="bg-white rounded-t-[32px] pt-[26px] px-[22px] pb-6 anim-sheet">
     <div class="w-[54px] h-[54px] rounded-full bg-verde-200 grid place-items-center mb-[14px] text-verde-800">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
     </div>
-    <h3 class="font-display text-[25px] leading-tight text-azul mt-0 mb-2">Pedido armado</h3>
+    <h3 id="confirmTitulo" class="font-display text-[25px] leading-tight text-azul mt-0 mb-2">Pedido armado</h3>
     <p id="confirmTxt" class="mt-0 mb-[18px] text-[13px] leading-relaxed text-arena-800"></p>
     <a id="confirmWa" href="#" target="_blank" rel="noopener" class="block text-center py-4 rounded-full bg-rojo text-white text-[14.5px] font-extrabold no-underline hover:bg-rojo-dark">Enviar por WhatsApp</a>
     <button type="button" id="btnCerrarConfirm" class="w-full mt-2 py-3 border-0 bg-transparent text-[12.5px] font-semibold text-arena-600 cursor-pointer">Volver al pedido</button>
@@ -262,7 +267,7 @@ tailwind.config = {
 (function () {
   var D = window.ANTONYSIA, C = D.CONFIG;
   var $ = function (id) { return document.getElementById(id); };
-  var FOTOS = { k025: "assets/foto-vainilla.png", k050: "assets/foto-dulce.png", k100: "assets/foto-cucurucho.png" };
+  var FOTOS = { k025: "assets/foto-vainilla.webp", k050: "assets/foto-dulce.webp", k100: "assets/foto-cucurucho.webp" };
   var LS = "antonysia.pedido.v1";
 
   var st = {
@@ -280,17 +285,32 @@ tailwind.config = {
       }));
     } catch (e) {}
   }
+  var resumed = false;
   function load() {
     try {
       var raw = localStorage.getItem(LS);
       if (!raw) return;
       var d = JSON.parse(raw);
       if (!d || Date.now() - (d.ts || 0) > 86400000 * 3) return;
+      var hadPotes = (d.potes && d.potes.some(function (p) { return p.flavors && p.flavors.length; }));
       st.qty = d.qty || st.qty; st.potes = d.potes || []; st.promo = d.promo || null;
       st.nombre = d.nombre || ""; st.dir = d.dir || ""; st.notas = d.notas || "";
       st.cucu = !!d.cucu; st.vasitos = d.vasitos !== false;
       st.open = (st.potes.find(function (p) { return p.flavors.length < p.max; }) || {}).uid || null;
+      resumed = !!hadPotes;
     } catch (e) {}
+  }
+
+  function resetPedido() {
+    try { localStorage.removeItem(LS); } catch (e) {}
+    st.qty = { k025: 0, k050: 0, k100: 0 }; st.potes = []; st.open = null; st.promo = null; st.promosOpen = false;
+    st.nombre = ""; st.dir = ""; st.notas = ""; st.cambio = ""; st.cucu = false; st.vasitos = true;
+    st.pago = null; st.dia = null; st.detalle = false; st.pagoOpen = false; st.upsell = null;
+    $("fNombre").value = ""; $("fDir").value = ""; $("fNotas").value = "";
+    resumed = false;
+    $("avisoResume").classList.add("hidden");
+    render();
+    scrollTo("s0");
   }
 
   /* ---------- helpers ---------- */
@@ -310,6 +330,8 @@ tailwind.config = {
   function subtotal() { return D.subtotal(llenos()) + (st.cucu ? C.cucuruchos : 0) - descuento(); }
   function envio() { return D.costoEnvio(subtotal()); }
   function total() { return subtotal() + envio(); }
+
+  function haptic() { if (navigator.vibrate) navigator.vibrate(8); }
 
   var toastT;
   function flash(msg) {
@@ -357,6 +379,7 @@ tailwind.config = {
   function pickFlavor(uid, name) {
     var p = st.potes.find(function (x) { return x.uid === uid; });
     if (!p) return;
+    haptic();
     var i = p.flavors.indexOf(name);
     if (i > -1) { p.flavors.splice(i, 1); st.upsell = null; render(); return; }
     if (p.flavors.length >= p.max) { st.upsell = { uid: uid, name: name, key: p.key, label: p.label }; render(); return; }
@@ -405,6 +428,7 @@ tailwind.config = {
 
     /* hero: promos */
     $("promoChevron").textContent = st.promosOpen ? "▲" : "▼";
+    $("promoToggle").setAttribute("aria-expanded", st.promosOpen ? "true" : "false");
     $("promoPanel").classList.toggle("hidden", !st.promosOpen);
     $("heroFoto").style.height = st.promosOpen ? "0px" : "170px";
     var pa = promoActiva();
@@ -440,7 +464,7 @@ tailwind.config = {
         cuerpo = '<div class="px-3 pb-[14px]">' + D.SECCIONES.map(function (sec) {
           var fl = D.SABORES.filter(function (f) { return f.c === sec.key; }).map(function (f) {
             var on = p.flavors.indexOf(f.n) > -1;
-            return '<button type="button" data-pick="' + p.uid + '" data-flavor="' + f.n + '" class="flex items-center gap-[10px] w-full text-left py-[10px] px-[11px] rounded-2xl border-[1.5px] cursor-pointer ' + selCls(on) + '">' +
+            return '<button type="button" data-pick="' + p.uid + '" data-flavor="' + f.n + '" aria-pressed="' + on + '" class="flex items-center gap-[10px] w-full text-left py-[10px] px-[11px] rounded-2xl border-[1.5px] cursor-pointer ' + selCls(on) + '">' +
               '<span class="w-[23px] h-[23px] rounded-full grid place-items-center text-xs font-extrabold shrink-0 ' + (on ? "bg-azul text-white" : "bg-arena-200 text-arena-600") + '">' + (on ? "✓" : "+") + '</span>' +
               '<span class="flex flex-col gap-[1px] min-w-0"><span class="text-[13px] font-bold leading-tight">' + f.n + '</span>' +
               '<span class="text-[10.5px] leading-snug text-arena-700">' + f.d + '</span></span></button>';
@@ -449,7 +473,7 @@ tailwind.config = {
         }).join("") + '</div>';
       }
       return '<div class="border-[1.5px] rounded-[22px] overflow-hidden bg-white ' + (isOpen ? "border-azul" : "border-arena-300") + '">' +
-        '<button type="button" data-pote="' + p.uid + '" class="w-full flex items-center gap-[11px] p-[14px] bg-transparent border-0 cursor-pointer text-left">' +
+        '<button type="button" data-pote="' + p.uid + '" aria-expanded="' + isOpen + '" class="w-full flex items-center gap-[11px] p-[14px] bg-transparent border-0 cursor-pointer text-left">' +
           '<span class="w-[30px] h-[30px] rounded-full grid place-items-center text-xs font-extrabold shrink-0 ' + (done ? "bg-verde-600 text-white" : "bg-[#dbe8f1] text-azul") + '">' + (i + 1) + '</span>' +
           '<span class="flex-1 flex flex-col gap-[2px]"><span class="text-sm font-bold leading-tight">Pote ' + (i + 1) + ' · ' + p.label + '</span>' +
           '<span class="text-[11.5px] font-semibold leading-snug ' + (done ? "text-verde-700" : "text-arena-600") + '">' + p.flavors.length + ' de ' + p.max + (done ? " ✓" : "") + '</span></span>' +
@@ -476,12 +500,14 @@ tailwind.config = {
     $("bloqueDias").classList.toggle("hidden", !cerrado);
     $("dias").innerHTML = dias.map(function (d) {
       var on = st.dia === d.id;
-      return '<button type="button" data-dia="' + d.id + '" class="py-[11px] px-[15px] rounded-full border-[1.5px] cursor-pointer text-[12.5px] font-bold ' + (on ? "border-azul bg-azul text-white" : "border-arena-300 bg-white text-tinta") + '">' + d.label + ' ' + d.num + '</button>';
+      return '<button type="button" data-dia="' + d.id + '" aria-pressed="' + on + '" class="py-[11px] px-[15px] rounded-full border-[1.5px] cursor-pointer text-[12.5px] font-bold ' + (on ? "border-azul bg-azul text-white" : "border-arena-300 bg-white text-tinta") + '">' + d.label + ' ' + d.num + '</button>';
     }).join("");
 
     $("btnCucu").className = "flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left " + selCls(st.cucu);
+    $("btnCucu").setAttribute("aria-pressed", st.cucu ? "true" : "false");
     $("btnCucu").querySelector("[data-mark]").className = "w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 " + (st.cucu ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
     $("btnCucu").querySelector("[data-mark]").textContent = st.cucu ? "✓" : "+";
+    $("btnVasitos").setAttribute("aria-pressed", st.vasitos ? "true" : "false");
     $("btnVasitos").className = "flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left " + selCls(st.vasitos);
     $("btnVasitos").querySelector("[data-mark]").className = "w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 " + (st.vasitos ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
     $("btnVasitos").querySelector("[data-mark]").textContent = st.vasitos ? "✓" : "+";
@@ -490,7 +516,6 @@ tailwind.config = {
     $("btnPago").className = "mt-[22px] w-full py-4 border-0 rounded-full text-[15px] font-extrabold cursor-pointer " + (okEntrega ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
 
     /* header + barra */
-    $("headerTotal").textContent = ll.length ? D.ars(tot) : "";
     $("tabs").innerHTML = [1, 2, 3].map(function (n) {
       var on = st.pagoOpen ? n === 3 : n === activeStep;
       var label = ["El pote", "Entrega", "Pago"][n - 1];
@@ -507,6 +532,7 @@ tailwind.config = {
     $("barTotal").textContent = D.ars(tot);
     if (pulse) { $("barTotal").classList.remove("anim-pop"); void $("barTotal").offsetWidth; $("barTotal").classList.add("anim-pop"); }
     $("barChevron").textContent = st.detalle ? "▾" : "▴";
+    $("barToggle").setAttribute("aria-expanded", st.detalle ? "true" : "false");
     $("barDetalle").classList.toggle("hidden", !st.detalle);
     $("barDetalle").innerHTML = ll.map(function (p) {
       return '<div class="flex justify-between gap-[10px] items-start border-t border-white/[.16] pt-2">' +
@@ -519,7 +545,7 @@ tailwind.config = {
     $("pagoOverlay").classList.toggle("hidden", !st.pagoOpen);
     $("pagos").innerHTML = Object.keys(PAGOS).map(function (id) {
       var m = PAGOS[id], on = st.pago === id;
-      return '<button type="button" data-pago="' + id + '" class="flex items-center gap-3 p-[15px] rounded-[20px] border-[1.5px] cursor-pointer text-left ' + selCls(on) + '">' +
+      return '<button type="button" data-pago="' + id + '" aria-pressed="' + on + '" class="flex items-center gap-3 p-[15px] rounded-[20px] border-[1.5px] cursor-pointer text-left ' + selCls(on) + '">' +
         '<span class="w-9 h-9 rounded-full grid place-items-center shrink-0" style="background:' + m.bg + ';color:' + m.fg + '">' +
         '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">' + m.icon + '</svg></span>' +
         '<span class="flex-1 flex flex-col gap-[2px]"><span class="text-sm font-bold leading-tight">' + m.label + '</span>' +
@@ -551,6 +577,34 @@ tailwind.config = {
 
   /* ---------- eventos ---------- */
   var activeStep = 1;
+  var lastFocus = null;
+
+  function focusSoon(id) { var el = $(id); if (el) setTimeout(function () { el.focus(); }, 0); }
+  function cerrarPago() {
+    st.pagoOpen = false; render();
+    if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+  }
+  function cerrarConfirm() {
+    $("confirmOverlay").classList.add("hidden");
+    if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+  }
+
+  function pushStep(tag) {
+    try { history.pushState({ antonysia: tag }, ""); } catch (e) {}
+  }
+
+  window.addEventListener("popstate", function () {
+    if (!$("confirmOverlay").classList.contains("hidden")) { cerrarConfirm(); return; }
+    if (st.pagoOpen) { cerrarPago(); return; }
+    if (activeStep === 2) { scrollTo("s1"); return; }
+    if (activeStep === 1) { scrollTo("s0"); return; }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (!$("confirmOverlay").classList.contains("hidden")) { cerrarConfirm(); return; }
+    if (st.pagoOpen) cerrarPago();
+  });
 
   $("scroller").addEventListener("scroll", function () {
     var y = this.scrollTop;
@@ -582,7 +636,7 @@ tailwind.config = {
     }
     switch (t.id) {
       case "promoToggle": st.promosOpen = !st.promosOpen; render(); break;
-      case "btnEmpezar": scrollTo("s1"); break;
+      case "btnEmpezar": pushStep("s1"); scrollTo("s1"); break;
       case "btnInicio": scrollTo("s0"); break;
       case "upsellYes": {
         var u = st.upsell;
@@ -594,17 +648,22 @@ tailwind.config = {
         break;
       }
       case "upsellNo": st.upsell = null; render(); break;
+      case "btnResumeSeguir":
+        resumed = false; $("avisoResume").classList.add("hidden");
+        if (llenos().length) scrollTo("s1");
+        break;
+      case "btnResumeNuevo": resetPedido(); break;
       case "btnEntrega":
         if (!llenos().length) { flash("Elegí al menos un sabor"); return; }
-        scrollTo("s2");
+        pushStep("s2"); scrollTo("s2");
         break;
       case "btnCucu": st.cucu = !st.cucu; render(true); break;
       case "btnVasitos": st.vasitos = !st.vasitos; render(); break;
       case "btnPago": abrirPago(); break;
-      case "btnCerrarPago": case "pagoBackdrop": st.pagoOpen = false; render(); break;
+      case "btnCerrarPago": case "pagoBackdrop": cerrarPago(); break;
       case "barToggle": st.detalle = !st.detalle; render(); break;
       case "btnConfirmar": confirmar(); break;
-      case "btnCerrarConfirm": $("confirmOverlay").classList.add("hidden"); break;
+      case "btnCerrarConfirm": cerrarConfirm(); break;
     }
   });
 
@@ -618,16 +677,22 @@ tailwind.config = {
     if (!st.nombre.trim()) { flash("Falta tu nombre"); scrollTo("s2"); $("fNombre").focus(); return; }
     if (!st.dir.trim()) { flash("Falta la dirección"); scrollTo("s2"); $("fDir").focus(); return; }
     if (cerrado && !st.dia) { flash("Elegí el día de entrega"); scrollTo("s2"); return; }
+    pushStep("pago");
+    lastFocus = document.activeElement;
     st.pagoOpen = true; render();
+    focusSoon("btnCerrarPago");
   }
 
   function confirmar() {
     if (!st.pago) { flash("Elegí un medio de pago"); return; }
     if (st.pago === "mercadopago") {
+      pushStep("confirm");
+      lastFocus = document.activeElement;
       st.pagoOpen = false; render();
       $("confirmTxt").textContent = "Pagá " + D.ars(total()) + " con Mercado Pago y mandanos el detalle por WhatsApp para que lo preparemos.";
       $("confirmWa").href = waHref();
       $("confirmOverlay").classList.remove("hidden");
+      focusSoon("btnCerrarConfirm");
       return;
     }
     window.open(waHref(), "_blank");
@@ -659,8 +724,8 @@ tailwind.config = {
 
   load();
   $("fNombre").value = st.nombre; $("fDir").value = st.dir; $("fNotas").value = st.notas;
+  $("avisoResume").classList.toggle("hidden", !resumed);
   render();
-  if (llenos().length) setTimeout(function () { scrollTo("s1"); }, 120);
 })();
 </script>
 </body>

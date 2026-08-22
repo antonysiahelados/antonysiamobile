@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antonysia Helados — Elaboración propia en Loma Hermosa</title>
+<meta name="description" content="Helados artesanales de elaboración propia en Loma Hermosa. Armá tu pote en tres pasos y te lo llevamos.">
+<meta name="theme-color" content="#005B93">
+<link rel="icon" href="Logo Instagram.jpg">
+<meta property="og:title" content="Antonysia Helados">
+<meta property="og:description" content="Elaboración propia. Armá tu pote y te lo llevamos.">
+<meta property="og:image" content="Logo Instagram.jpg">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        azul: { DEFAULT: "#005B93", dark: "#00426B", soft: "#EEF4F8", tint: "#E6F0F7" },
+        rojo: { DEFAULT: "#BF4646", dark: "#A33636" },
+        crema: "#EDDCC6", fondo: "#F5EAD8", tinta: "#201E1D",
+        verde: { 200: "#DCE7C8", 600: "#7A8A5E", 700: "#63724A", 800: "#4C5938" },
+        arena: { 100: "#F6EEE2", 200: "#EBDDC5", 300: "#DDCBAF", 600: "#7C7365", 700: "#645C50", 800: "#43403A" }
+      },
+      fontFamily: { display: ['Caprasimo', 'serif'], body: ['Figtree', 'system-ui', 'sans-serif'] }
+    }
+  }
+};
+</script>
+<style>
+  :root { --eo: cubic-bezier(.22,.9,.3,1); --ei: cubic-bezier(.4,0,1,1); }
+  html, body { margin: 0; background: #005B93; }
+  body { font-family: Figtree, system-ui, sans-serif; color: #201E1D; -webkit-tap-highlight-color: transparent; }
+  a { color: #005B93; }
+  a:hover { color: #BF4646; }
+  #scroller { scroll-snap-type: y proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #scroller::-webkit-scrollbar, .noscroll::-webkit-scrollbar { width: 0; height: 0; }
+  .noscroll { scrollbar-width: none; }
+  .snap { scroll-snap-align: start; }
+  *:focus-visible { outline: 2px solid #EDDCC6; outline-offset: 2px; }
+
+  /* feedback tactil unificado */
+  button, a[href] { transition: transform .13s var(--eo), background-color .2s var(--eo), border-color .2s var(--eo), color .2s var(--eo), opacity .2s var(--eo); }
+  button:not(:disabled):active, a[href]:active { transform: scale(.975); }
+  .chev { transition: transform .28s var(--eo); }
+  .chev-up { transform: rotate(180deg); }
+
+  @keyframes pop { 0% { transform: scale(1); } 38% { transform: scale(1.11); } 100% { transform: scale(1); } }
+  @keyframes rise { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sheetIn { from { transform: translateY(100%); } to { transform: none; } }
+  @keyframes sheetOut { from { transform: none; } to { transform: translateY(100%); } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes acc { from { grid-template-rows: 0fr; opacity: 0; } to { grid-template-rows: 1fr; opacity: 1; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes markIn { from { transform: scale(.4); opacity: .2; } to { transform: none; opacity: 1; } }
+  @keyframes tap { 0% { transform: scale(1); } 30% { transform: scale(.82); } 65% { transform: scale(1.12); } 100% { transform: scale(1); } }
+  @keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(0,91,147,.35); } 100% { box-shadow: 0 0 0 12px rgba(0,91,147,0); } }
+
+  .anim-pop { animation: pop .32s var(--eo); }
+  .anim-rise { animation: rise .24s var(--eo) both; }
+  .anim-fade { animation: fade .2s var(--eo) both; }
+  .anim-sheet { animation: sheetIn .34s var(--eo); }
+  .closing .anim-sheet { animation: sheetOut .22s var(--ei) forwards; }
+  .closing { animation: fadeOut .22s var(--ei) forwards; }
+  .acc { display: grid; grid-template-rows: 1fr; animation: acc .3s var(--eo); }
+  .acc > * { overflow: hidden; }
+  .stagger > * { animation: rise .3s var(--eo) both; animation-delay: calc(var(--d, 0) * 22ms); }
+  .mark-in { animation: markIn .26s var(--eo); }
+  .anim-tap { animation: tap .34s var(--eo); }
+  .anim-flash { animation: flash .5s var(--eo); }
+  .intro > * { animation: rise .55s var(--eo) both; }
+  .intro > *:nth-child(1) { animation-delay: .04s; }
+  .intro > *:nth-child(2) { animation-delay: .1s; }
+  .intro > *:nth-child(3) { animation-delay: .16s; }
+  .intro > *:nth-child(4) { animation-delay: .22s; }
+  .intro > *:nth-child(5) { animation-delay: .27s; }
+  .intro > *:nth-child(6) { animation-delay: .32s; }
+  .intro > *:nth-child(n+7) { animation-delay: .38s; }
+  .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 999px; animation: spin .7s linear infinite; vertical-align: -1px; }
+  .hidden { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body class="font-body">
+
+<div id="scroller" class="fixed inset-y-0 left-1/2 -translate-x-1/2 w-full max-w-[440px] overflow-y-auto bg-azul shadow-[0_0_60px_rgba(0,0,0,.25)]">
+
+  <!-- Hero -->
+  <section id="s0" class="snap min-h-[100dvh] box-border px-5 pt-[18px] pb-9 flex flex-col bg-azul text-white intro">
+    <div id="avisoCerrado" class="hidden rounded-[20px] bg-white/10 p-4 flex gap-3 items-start">
+      <span class="w-[34px] h-[34px] rounded-full bg-white/15 grid place-items-center shrink-0 text-crema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path><path d="M6 17h12"></path></svg>
+      </span>
+      <div class="flex flex-col gap-[3px]">
+        <strong class="text-[13.5px] font-bold leading-tight">Hoy estamos elaborando</strong>
+        <span class="text-[12px] leading-snug text-white/80">Así sale fresco: lunes a miércoles hacemos el helado. Armá tu pedido igual y lo programamos para <span id="proximoDia">el jueves</span>.</span>
+      </div>
+    </div>
+
+    <img src="antonysia-logotipo.png" alt="Antonysia Helados" class="w-[250px] h-auto block mt-[30px]">
+
+    <h1 class="font-display text-[33px] leading-[1.08] mt-6 [text-wrap:pretty]">El helado que<br>hacíamos en casa,<br><span class="text-crema">ahora para todos.</span></h1>
+    <p class="text-[15px] leading-relaxed text-white/[.78] mt-[13px] max-w-[310px] [text-wrap:pretty]">Sin vueltas: elegís los sabores y nosotros hacemos el resto.</p>
+
+    <div class="mt-[15px] flex flex-wrap items-center gap-[6px]">
+      <span class="inline-flex items-center gap-[5px] py-[6px] pl-[8px] pr-[11px] rounded-full bg-white/[.13] text-[10.5px] font-extrabold uppercase tracking-[.1em] text-crema">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        Llegamos a
+      </span>
+      <span id="heroZonas" class="flex flex-wrap gap-[6px]"></span>
+    </div>
+    <p class="mt-[9px] text-[11.5px] leading-snug text-white/60">¿Estás cerca pero no figurás? <a href="https://wa.me/5491162419013" target="_blank" rel="noopener" class="font-bold text-crema underline decoration-crema/40 underline-offset-2">Escribinos por WhatsApp</a>.</p>
+
+    <div id="heroFoto" class="mt-[18px] rounded-[28px] overflow-hidden bg-crema h-[170px] transition-[height] duration-200">
+      <img src="foto-hero.jpg" alt="Dos potes de helado de crema recién servidos" width="626" height="417" loading="eager" decoding="async" class="w-full h-full object-cover object-[62%_45%]">
+    </div>
+
+    <div class="flex-1"></div>
+
+    <!-- Promociones -->
+    <div class="mt-5 rounded-[22px] overflow-hidden bg-rojo shadow-lg">
+      <button type="button" id="promoToggle" class="w-full flex items-center gap-[10px] p-4 bg-transparent border-0 cursor-pointer text-left text-white hover:bg-rojo-dark transition-colors">
+        <span class="w-[26px] h-[26px] rounded-full bg-white/[.18] grid place-items-center shrink-0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>
+        </span>
+        <span class="flex-1 flex flex-col gap-[2px]">
+          <span class="text-sm font-extrabold leading-tight">Promociones</span>
+          <span id="promoSub" class="text-[11px] font-medium leading-snug text-white/80">2 promos activas esta semana</span>
+        </span>
+        <span id="promoChevron" class="chev text-white/80 grid place-items-center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </span>
+      </button>
+      <div id="promoPanel" class="hidden px-[10px] pb-[10px] grid gap-2 max-h-[230px] overflow-y-auto noscroll"></div>
+    </div>
+
+    <button type="button" id="btnEmpezar" class="mt-[10px] w-full py-[18px] border-0 rounded-full bg-rojo hover:bg-rojo-dark active:scale-[.98] transition text-white text-base font-extrabold cursor-pointer shadow-lg">Armar mi pote</button>
+
+    <div class="grid grid-cols-3 gap-2 mt-4">
+      <a href="https://wa.me/5491162419013" target="_blank" rel="noopener" class="flex flex-col items-center gap-[6px] py-3 rounded-[18px] bg-white/10 hover:bg-white/[.18] transition-colors no-underline text-crema">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8Z"></path></svg>
+        <span class="text-[11px] font-bold text-white">WhatsApp</span>
+      </a>
+      <a href="https://instagram.com/antonysiahelados_" target="_blank" rel="noopener" class="flex flex-col items-center gap-[6px] py-3 rounded-[18px] bg-white/10 hover:bg-white/[.18] transition-colors no-underline text-crema">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+        <span class="text-[11px] font-bold text-white">Instagram</span>
+      </a>
+      <a href="https://maps.google.com/?q=Gabino+Ezeiza+8679,+Loma+Hermosa" target="_blank" rel="noopener" class="flex flex-col items-center gap-[6px] py-3 rounded-[18px] bg-white/10 hover:bg-white/[.18] transition-colors no-underline text-crema">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span class="text-[11px] font-bold text-white">Cómo llegar</span>
+      </a>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-[14px]">
+      <div class="flex items-center gap-[6px]"><span class="w-[19px] h-[19px] rounded-full bg-white/[.16] grid place-items-center text-[10px] font-extrabold text-crema">1</span><span class="text-[11px] font-semibold text-white/70">El pote</span></div>
+      <div class="flex items-center gap-[6px]"><span class="w-[19px] h-[19px] rounded-full bg-white/[.16] grid place-items-center text-[10px] font-extrabold text-crema">2</span><span class="text-[11px] font-semibold text-white/70">Entrega</span></div>
+      <div class="flex items-center gap-[6px]"><span class="w-[19px] h-[19px] rounded-full bg-white/[.16] grid place-items-center text-[10px] font-extrabold text-crema">3</span><span class="text-[11px] font-semibold text-white/70">Pago</span></div>
+    </div>
+  </section>
+
+  <!-- Paso 1 -->
+  <section id="s1" class="snap min-h-[100dvh] box-border px-5 pt-[132px] pb-[130px] bg-fondo rounded-t-[32px]">
+    <span class="text-[10px] font-extrabold tracking-[.18em] uppercase text-rojo">Paso 1 de 3</span>
+    <h2 class="font-display text-[26px] leading-tight text-azul mt-3 mb-1">¿Cuánto helado?</h2>
+    <p class="text-[12.5px] leading-snug text-arena-700 mb-4">Sumá los potes que quieras — después elegís los sabores de cada uno.</p>
+
+    <div id="sizes" class="grid gap-[10px]"></div>
+
+    <div id="bloqueSabores" class="hidden mt-[26px]">
+      <h3 class="font-display text-[22px] leading-tight text-azul mb-1">Los sabores</h3>
+      <p id="saboresHint" class="text-[12.5px] leading-snug text-arena-700 mb-[14px]">Tocá los sabores que quieras en tu pote.</p>
+      <div id="potes" class="grid gap-[10px]"></div>
+      <div id="upsell" class="hidden mt-3 rounded-[20px] bg-arena-100 border-[1.5px] border-arena-300 p-[14px] anim-rise"></div>
+      <button type="button" id="btnEntrega" class="mt-[18px] w-full py-4 border-0 rounded-full text-[15px] font-extrabold cursor-pointer bg-arena-200 text-arena-600">Elegí sabores para seguir</button>
+    </div>
+  </section>
+
+  <!-- Paso 2 -->
+  <section id="s2" class="snap min-h-[100dvh] box-border px-5 pt-[132px] pb-[140px] bg-azul-soft">
+    <span class="text-[10px] font-extrabold tracking-[.18em] uppercase text-rojo">Paso 2 de 3</span>
+    <h2 id="tituloEntrega" class="font-display text-[26px] leading-tight text-azul mt-3 mb-4">¿Dónde te lo dejamos?</h2>
+
+    <div class="grid grid-cols-2 gap-2 mb-[18px]">
+      <button type="button" id="modoEnvio" data-entrega="envio" class="flex flex-col gap-[3px] items-start text-left p-[13px] rounded-[20px] border-[1.5px] cursor-pointer border-azul bg-azul-tint">
+        <span data-ico class="w-8 h-8 rounded-full grid place-items-center mb-[3px] bg-azul text-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M14 9h4l4 4v4a1 1 0 0 1-1 1h-1"></path><circle cx="7.5" cy="18" r="2"></circle><circle cx="17.5" cy="18" r="2"></circle></svg>
+        </span>
+        <span class="text-[13px] font-extrabold text-azul leading-tight">Te lo llevamos</span>
+        <span class="text-[10.5px] leading-snug text-arena-700">$2.000 · gratis desde $30.000</span>
+      </button>
+      <button type="button" id="modoRetiro" data-entrega="retiro" class="flex flex-col gap-[3px] items-start text-left p-[13px] rounded-[20px] border-[1.5px] cursor-pointer border-arena-300 bg-white">
+        <span data-ico class="w-8 h-8 rounded-full grid place-items-center mb-[3px] bg-arena-200 text-arena-700">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18l-1.5-4.5A2 2 0 0 0 17.6 3H6.4a2 2 0 0 0-1.9 1.5Z"></path><path d="M4 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"></path><path d="M9 13h6"></path></svg>
+        </span>
+        <span class="text-[13px] font-extrabold text-azul leading-tight">Vení a buscarlo</span>
+        <span class="text-[10.5px] leading-snug text-verde-700 font-bold">Gratis · retiro en el local</span>
+      </button>
+    </div>
+
+    <div class="grid gap-3">
+      <label class="flex flex-col gap-[6px]">
+        <span class="text-[11.5px] font-bold text-azul">Tu nombre</span>
+        <input id="fNombre" type="text" autocomplete="name" placeholder="Ej: Lautaro" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
+      </label>
+      <div id="bloqueDireccion" class="grid gap-3">
+        <label class="flex flex-col gap-[6px]">
+          <span class="text-[11.5px] font-bold text-azul">Dirección y localidad</span>
+          <input id="fDir" type="text" autocomplete="street-address" placeholder="Ej: Gabino Ezeiza 8679, Loma Hermosa" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
+        </label>
+        <div id="geoBox" class="hidden rounded-[18px] py-3 px-[14px] text-[11.5px] font-medium leading-relaxed border-[1.5px]"></div>
+        <label class="flex flex-col gap-[6px]">
+          <span class="text-[11.5px] font-bold text-azul">Aclaraciones <span class="font-normal text-arena-600">(opcional)</span></span>
+          <input id="fNotas" type="text" placeholder="Ej: timbre 2B / casa de rejas negras" class="py-[14px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-sm">
+        </label>
+      </div>
+
+      <div id="bloqueRetiro" class="hidden rounded-[22px] border-[1.5px] border-azul bg-azul-tint p-[15px]">
+        <span class="text-[10px] font-extrabold tracking-[.16em] uppercase text-rojo">Retirás vos · sin cargo</span>
+        <p class="font-display text-[17px] leading-tight text-azul mt-2 mb-0">Gabino Ezeiza 8679</p>
+        <p class="text-[12.5px] leading-snug text-arena-800 mt-[3px] mb-0">Loma Hermosa, Buenos Aires</p>
+        <p class="text-[11.5px] leading-snug text-arena-700 mt-2 mb-0" id="retiroHorarios"></p>
+        <div class="flex gap-2 mt-3">
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Gabino%20Ezeiza%208679%2C%20Loma%20Hermosa%2C%20Buenos%20Aires" target="_blank" rel="noopener" class="flex-1 py-3 px-3 rounded-full bg-azul text-white text-[12.5px] font-extrabold text-center no-underline">Cómo llegar →</a>
+          <a href="https://wa.me/5491162419013" target="_blank" rel="noopener" class="py-3 px-4 rounded-full border-[1.5px] border-azul text-azul text-[12.5px] font-extrabold no-underline">Avisar</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="bloqueDias" class="hidden mt-[18px]">
+      <span class="text-[11.5px] font-bold text-azul">¿Para qué día lo programamos?</span>
+      <div id="dias" class="flex gap-2 mt-[9px] flex-wrap"></div>
+      <p class="mt-[9px] text-[11px] leading-snug text-arena-600">El horario lo coordinamos por WhatsApp. <span id="horarios"></span></p>
+    </div>
+
+    <div class="mt-5">
+      <span class="text-[11.5px] font-bold text-azul">¿Sumamos algo más?</span>
+      <div class="grid gap-2 mt-[9px]">
+        <button type="button" id="btnCucu" class="flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left border-arena-300 bg-white">
+          <span data-mark class="w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 bg-arena-200 text-arena-600">+</span>
+          <span class="flex-1 text-[12.5px] font-bold">Pack 4 cucuruchos crocantes</span>
+          <span class="text-[12.5px] font-extrabold text-azul">+$1.500</span>
+        </button>
+        <button type="button" id="btnVasitos" class="flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left border-azul bg-azul-tint">
+          <span data-mark class="w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 bg-azul text-white">✓</span>
+          <span class="flex-1 text-[12.5px] font-bold">Vasitos y cucharitas extra</span>
+          <span class="text-xs font-bold text-verde-700">Gratis</span>
+        </button>
+      </div>
+    </div>
+
+    <button type="button" id="btnPago" class="mt-[22px] w-full py-4 border-0 rounded-full text-[15px] font-extrabold cursor-pointer bg-arena-200 text-arena-600">Seguir al pago</button>
+
+    <footer class="mt-10 pt-6 border-t border-arena-300 text-[11.5px] leading-relaxed text-arena-700">
+      <p class="m-0">Antonysia Helados · Gabino Ezeiza 8679, Loma Hermosa</p>
+      <p class="mt-1 mb-0" id="footerHorarios"></p>
+    </footer>
+  </section>
+</div>
+
+<!-- Header fijo -->
+<header id="header" class="fixed left-1/2 top-0 w-full max-w-[440px] z-40 bg-azul px-[14px] pt-[10px] pb-[11px] flex flex-col gap-[9px] shadow-[0_6px_18px_rgba(0,42,68,.22)] -translate-x-1/2 -translate-y-full opacity-0 pointer-events-none transition-[transform,opacity] duration-[320ms] ease-out will-change-transform">
+  <div class="flex items-center gap-[9px]">
+    <button type="button" id="btnInicio" aria-label="Volver al inicio" class="flex items-center bg-transparent border-0 p-0 cursor-pointer">
+      <img src="antonysia-logotipo.png" alt="Antonysia Helados" class="w-32 h-auto block">
+    </button>
+    <span class="flex-1"></span>
+    <div class="flex items-center gap-2 -mr-[6px]">
+      <a href="https://wa.me/5491162419013" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" class="w-11 h-11 rounded-full bg-white/[.12] hover:bg-white/25 transition-colors grid place-items-center text-crema">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8Z"></path></svg>
+      </a>
+      <a href="https://instagram.com/antonysiahelados_" target="_blank" rel="noopener" aria-label="Seguinos en Instagram" class="w-11 h-11 rounded-full bg-white/[.12] hover:bg-white/25 transition-colors grid place-items-center text-crema">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+      </a>
+      <a href="https://maps.google.com/?q=Gabino+Ezeiza+8679,+Loma+Hermosa" target="_blank" rel="noopener" aria-label="Cómo llegar" class="w-11 h-11 rounded-full bg-white/[.12] hover:bg-white/25 transition-colors grid place-items-center text-crema">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      </a>
+    </div>
+  </div>
+  <nav class="flex gap-[6px]" id="tabs"></nav>
+  <div class="h-[3px] rounded-full bg-white/[.14] overflow-hidden -mb-[3px]">
+    <div id="progFill" class="h-full w-[8%] rounded-full bg-crema transition-[width] duration-[450ms] ease-out"></div>
+  </div>
+</header>
+
+<!-- Barra de pedido -->
+<div id="bar" class="fixed left-1/2 bottom-[14px] z-30 w-[calc(100%-28px)] max-w-[412px] rounded-[24px] bg-azul-dark text-white shadow-2xl overflow-hidden -translate-x-1/2 translate-y-[140%] opacity-0 pointer-events-none transition-[transform,opacity] duration-[340ms] ease-out will-change-transform">
+  <button type="button" id="barToggle" class="w-full flex items-center gap-3 py-[14px] px-4 bg-transparent border-0 cursor-pointer text-left text-inherit">
+    <span class="flex-1 flex flex-col gap-[2px]">
+      <span id="barPotes" class="text-[13.5px] font-bold leading-tight">1 pote</span>
+      <span id="barHint" class="text-[11px] font-medium leading-snug text-white/60"></span>
+    </span>
+    <span id="barTotal" class="font-display text-[21px] leading-none text-crema"></span>
+    <span id="barChevron" class="chev chev-up opacity-60 grid place-items-center">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    </span>
+  </button>
+  <div id="barDetalle" class="hidden px-4 pb-[14px] grid gap-[7px]"></div>
+</div>
+
+<!-- Hoja de pago -->
+<div id="pagoOverlay" class="hidden fixed inset-0 z-50 bg-[rgba(0,42,68,.5)] anim-fade">
+  <button type="button" id="pagoBackdrop" aria-label="Cerrar" class="absolute inset-0 w-full border-0 bg-transparent cursor-pointer"></button>
+  <div class="absolute left-0 right-0 bottom-0 mx-auto w-full max-w-[440px] max-h-[88%] flex flex-col bg-fondo rounded-t-[30px] anim-sheet shadow-2xl">
+    <div class="pt-[10px] pb-1 grid place-items-center shrink-0"><div class="w-[42px] h-1 rounded-full bg-arena-300"></div></div>
+    <div class="pt-[6px] px-5 pb-3 flex items-baseline gap-[9px] shrink-0">
+      <span class="text-[9.5px] font-extrabold tracking-[.16em] uppercase text-rojo">Paso 3 de 3</span>
+      <h2 class="font-display text-[23px] leading-tight text-azul m-0">¿Cómo abonás?</h2>
+    </div>
+    <div class="flex-1 overflow-y-auto noscroll px-5 pb-4">
+      <div id="pagos" class="grid gap-[9px]"></div>
+      <div id="datosTransfer" class="hidden mt-[14px] rounded-[20px] bg-white border-[1.5px] border-arena-300 p-[14px] grid gap-[9px] anim-rise">
+        <div class="flex items-center justify-between gap-[10px]">
+          <div class="flex flex-col gap-[2px]">
+            <span class="text-[9px] font-extrabold tracking-[.14em] uppercase text-azul">Alias</span>
+            <span id="txtAlias" class="text-[13.5px] font-bold leading-tight font-mono"></span>
+          </div>
+          <button type="button" data-copy="alias" class="py-2 px-[13px] border-0 rounded-full bg-azul text-white text-[11px] font-bold cursor-pointer">Copiar</button>
+        </div>
+        <div class="h-px bg-arena-300"></div>
+        <div class="flex items-center justify-between gap-[10px]">
+          <div class="flex flex-col gap-[2px] min-w-0">
+            <span class="text-[9px] font-extrabold tracking-[.14em] uppercase text-azul">CVU</span>
+            <span id="txtCvu" class="text-[11.5px] font-bold leading-tight font-mono truncate"></span>
+          </div>
+          <button type="button" data-copy="cvu" class="py-2 px-[13px] border-0 rounded-full bg-azul text-white text-[11px] font-bold cursor-pointer shrink-0">Copiar</button>
+        </div>
+        <span class="text-[11px] font-medium leading-snug text-arena-700">Titular: <span id="txtTitular"></span> · mandanos el comprobante por WhatsApp.</span>
+      </div>
+      <label id="campoEfectivo" class="hidden mt-[14px] flex-col gap-[6px] anim-rise">
+        <span class="text-[11.5px] font-bold text-azul">¿Con cuánto abonás?</span>
+        <input id="fCambio" type="text" placeholder="Ej: pago con $30.000" class="py-[13px] px-4 rounded-full border-[1.5px] border-arena-300 bg-white text-[13.5px]">
+      </label>
+      <div class="mt-4 rounded-[22px] bg-azul text-white p-[15px] grid gap-2">
+        <div id="resumen" class="grid gap-2"></div>
+        <div class="h-px bg-white/20"></div>
+        <div class="flex justify-between items-baseline">
+          <span class="text-[13px] font-bold">Total</span>
+          <span id="totalPago" class="font-display text-2xl leading-none text-crema"></span>
+        </div>
+      </div>
+    </div>
+    <div class="shrink-0 py-3 px-5 pb-[18px] border-t border-arena-300 flex gap-[10px] items-center bg-fondo">
+      <button type="button" id="btnCerrarPago" aria-label="Volver" class="w-[46px] h-[46px] rounded-full border-[1.5px] border-arena-300 bg-white cursor-pointer text-[15px]">↓</button>
+      <button type="button" id="btnConfirmar" class="flex-1 py-[15px] border-0 rounded-full text-[14.5px] font-extrabold cursor-pointer bg-arena-200 text-arena-600">Elegí un medio de pago</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmación -->
+<div id="confirmOverlay" class="hidden fixed inset-0 z-[60] bg-[rgba(0,42,68,.6)] grid items-end anim-fade">
+  <div class="bg-white rounded-t-[32px] pt-[26px] px-[22px] pb-6 anim-sheet w-full max-w-[440px] mx-auto">
+    <div class="w-[54px] h-[54px] rounded-full bg-verde-200 grid place-items-center mb-[14px] text-verde-800">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+    </div>
+    <h3 class="font-display text-[25px] leading-tight text-azul mt-0 mb-2">Pedido armado</h3>
+    <p id="confirmTxt" class="mt-0 mb-[18px] text-[13px] leading-relaxed text-arena-800"></p>
+    <a id="confirmWa" href="#" target="_blank" rel="noopener" class="block text-center py-4 rounded-full bg-rojo text-white text-[14.5px] font-extrabold no-underline hover:bg-rojo-dark">Enviar por WhatsApp</a>
+    <button type="button" id="btnCerrarConfirm" class="w-full mt-2 py-3 border-0 bg-transparent text-[12.5px] font-semibold text-arena-600 cursor-pointer">Volver al pedido</button>
+  </div>
+</div>
+
+<div id="toast" class="hidden fixed z-[70] left-1/2 bottom-[100px] -translate-x-1/2 bg-azul-dark text-white py-[10px] px-4 rounded-full text-xs font-bold anim-rise"></div>
+
+<script src="antonysia-data.js"></script>
+<script>
+(function () {
+  var D = window.ANTONYSIA, C = D.CONFIG;
+  var $ = function (id) { return document.getElementById(id); };
+  var FOTOS = { k025: "foto-vainilla.png", k050: "foto-dulce.png", k100: "foto-cucurucho.png" };
+  var LS = "antonysia.pedido.v1";
+
+  var st = {
+    qty: { k025: 0, k050: 0, k100: 0 }, potes: [], open: null, promo: null, promosOpen: false,
+    nombre: "", dir: "", notas: "", cambio: "", cucu: false, vasitos: true, entrega: "envio", geo: { s: "idle" },
+    pago: null, dia: null, detalle: false, pagoOpen: false, upsell: null, justPicked: null, lastQty: null
+  };
+
+  /* Solo reescribe si el HTML cambió: evita flicker y reinicio de animaciones. */
+  var cache = {};
+  function setHTML(id, html) {
+    if (cache[id] === html) return false;
+    cache[id] = html; $(id).innerHTML = html; return true;
+  }
+  function replay(el, cls) { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  function vis(el, on, hideCls) {
+    el.classList.toggle(hideCls, !on);
+    el.classList.toggle("opacity-0", !on);
+    el.classList.toggle("pointer-events-none", !on);
+  }
+
+  /* ---------- persistencia ---------- */
+  function save() {
+    try {
+      localStorage.setItem(LS, JSON.stringify({
+        qty: st.qty, potes: st.potes, promo: st.promo, nombre: st.nombre, dir: st.dir,
+        notas: st.notas, cucu: st.cucu, vasitos: st.vasitos, entrega: st.entrega, ts: Date.now()
+      }));
+    } catch (e) {}
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS);
+      if (!raw) return;
+      var d = JSON.parse(raw);
+      if (!d || Date.now() - (d.ts || 0) > 86400000 * 3) return;
+      st.qty = d.qty || st.qty; st.potes = d.potes || []; st.promo = d.promo || null;
+      st.nombre = d.nombre || ""; st.dir = d.dir || ""; st.notas = d.notas || "";
+      st.cucu = !!d.cucu; st.vasitos = d.vasitos !== false;
+      st.entrega = d.entrega === "retiro" ? "retiro" : "envio";
+      st.open = (st.potes.find(function (p) { return p.flavors.length < p.max; }) || {}).uid || null;
+    } catch (e) {}
+  }
+
+  /* ---------- helpers ---------- */
+  var cerrado = D.cerrado(), dias = D.proximosDias();
+  function llenos() { return st.potes.filter(function (p) { return p.flavors.length > 0; }); }
+  function promoActiva() {
+    if (!st.promo) return null;
+    var pr = D.PROMOS.find(function (p) { return p.id === st.promo; });
+    if (!pr) return null;
+    var same = Object.keys(pr.comp).every(function (k) { return (st.qty[k] || 0) === pr.comp[k]; });
+    return same ? pr : null;
+  }
+  function descuento() {
+    var pr = promoActiva();
+    return pr && llenos().length === st.potes.length ? pr.lista - pr.precio : 0;
+  }
+  function subtotal() { return D.subtotal(llenos()) + (st.cucu ? C.cucuruchos : 0) - descuento(); }
+  function envio() { return st.entrega === "retiro" ? 0 : D.costoEnvio(subtotal()); }
+  function total() { return subtotal() + envio(); }
+
+  var toastT;
+  function flash(msg) {
+    var t = $("toast");
+    t.textContent = msg; t.classList.remove("hidden", "closing");
+    replay(t, "anim-rise");
+    clearTimeout(toastT);
+    toastT = setTimeout(function () {
+      t.classList.add("closing");
+      setTimeout(function () { t.classList.add("hidden"); t.classList.remove("closing"); }, 220);
+    }, 1900);
+  }
+  function irAPote(uid) {
+    st.open = uid; st.detalle = false; st.upsell = null;
+    if (st.pagoOpen) st.pagoOpen = false;
+    render();
+    setTimeout(function () {
+      var sc = $("scroller"), el = document.querySelector('[data-pote="' + uid + '"]');
+      if (!el || !sc) return;
+      var top = sc.scrollTop + el.getBoundingClientRect().top - 96;
+      sc.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }, 30);
+  }
+  /* ---------- verificación real de la dirección (OpenStreetMap) ---------- */
+  var geoT, geoSeq = 0;
+  function verificar() {
+    if (st.entrega === "retiro") return;
+    var q = st.dir.trim(), seq = ++geoSeq;
+    if (q.length < 8) { st.geo = { s: "idle" }; render(); return; }
+    st.geo = { s: "load" }; render();
+    D.verificarDireccion(q).then(function (r) {
+      if (seq !== geoSeq) return;
+      st.geo = r; render();
+    });
+  }
+  function pedirVerificacion() {
+    clearTimeout(geoT);
+    st.geo = { s: st.dir.trim().length < 8 ? "idle" : "load" };
+    geoT = setTimeout(verificar, 800);
+  }
+  var GEO = {
+    load: { cls: "border-arena-300 bg-arena-100 text-arena-800", txt: "Verificando la dirección en el mapa…" },
+    none: { cls: "border-arena-300 bg-arena-100 text-arena-800", txt: "No encontramos esa dirección en el mapa. Revisá la calle, la altura y la localidad." },
+    vago: { cls: "border-arena-300 bg-arena-100 text-arena-800", txt: "Falta la altura de la calle para poder ubicarte bien." },
+    err: { cls: "border-arena-300 bg-arena-100 text-arena-800", txt: "No pudimos verificar el mapa ahora. Seguí igual y lo confirmamos por WhatsApp." }
+  };
+
+  function scrollTo(id) {
+    var el = $(id), sc = $("scroller");
+    if (el && sc) sc.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+  }
+  function selCls(on) {
+    return on ? "border-azul bg-azul-tint" : "border-arena-300 bg-white";
+  }
+
+  function rebuild(qty) {
+    var out = [];
+    D.POTES.forEach(function (sz) {
+      var prev = st.potes.filter(function (p) { return p.key === sz.key; });
+      for (var i = 0; i < (qty[sz.key] || 0); i++) {
+        out.push(prev[i] || {
+          uid: sz.key + "-" + Date.now() + "-" + i + "-" + Math.random().toString(36).slice(2, 6),
+          key: sz.key, label: sz.label, max: sz.max, precio: sz.precio, flavors: []
+        });
+      }
+    });
+    return out;
+  }
+
+  function setQty(key, delta) {
+    var count = Object.keys(st.qty).reduce(function (a, k) { return a + st.qty[k]; }, 0);
+    if (delta > 0 && count >= C.maxPotes) { flash("Máximo " + C.maxPotes + " potes"); return; }
+    var antes = st.potes.map(function (p) { return p.uid; });
+    st.qty[key] = Math.max(0, (st.qty[key] || 0) + delta);
+    st.potes = rebuild(st.qty);
+    st.nuevos = st.potes.filter(function (p) { return antes.indexOf(p.uid) < 0; }).map(function (p) { return p.uid; });
+    if (!st.potes.some(function (p) { return p.uid === st.open; })) {
+      st.open = (st.potes.find(function (p) { return p.flavors.length < p.max; }) || {}).uid || null;
+    }
+    var pr = st.promo ? D.PROMOS.find(function (x) { return x.id === st.promo; }) : null;
+    if (pr && !Object.keys(pr.comp).every(function (k) { return (st.qty[k] || 0) === pr.comp[k]; })) st.promo = null;
+    st.upsell = null;
+    render(true);
+  }
+
+  function pickFlavor(uid, name) {
+    var p = st.potes.find(function (x) { return x.uid === uid; });
+    if (!p) return;
+    var i = p.flavors.indexOf(name);
+    if (i > -1) { p.flavors.splice(i, 1); st.upsell = null; st.justPicked = null; render(); return; }
+    if (p.flavors.length >= p.max) { st.upsell = { uid: uid, name: name, key: p.key, label: p.label }; render(); return; }
+    p.flavors.push(name);
+    st.justPicked = uid + "|" + name;
+    if (p.flavors.length === p.max) {
+      var next = st.potes.find(function (x) { return x.flavors.length < x.max; });
+      st.open = next ? next.uid : null;
+    }
+    st.upsell = null;
+    render(true);
+  }
+
+  function aplicarPromo(pr) {
+    st.qty = Object.assign({}, pr.comp);
+    st.potes = rebuild(st.qty);
+    st.promo = pr.id; st.promosOpen = false; st.upsell = null;
+    st.open = (st.potes[0] || {}).uid || null;
+    render(true);
+    setTimeout(function () { scrollTo("s1"); }, 40);
+  }
+
+  var PAGOS = {
+    mercadopago: { label: "Mercado Pago", sub: "Tarjetas, dinero en cuenta, Rapipago", bg: "#dff1fb", fg: "#0b6b93", txt: "💳 Mercado Pago (Pago Online)",
+      icon: '<rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line>' },
+    transferencia: { label: "Transferencia", sub: "Alias o CVU, desde cualquier banco", bg: "#e2e9f2", fg: "#005B93", txt: "🏦 Transferencia (Alias: " + C.alias + ")",
+      icon: '<polygon points="12 2 20 7 4 7"></polygon><line x1="6" x2="6" y1="11" y2="18"></line><line x1="10" x2="10" y1="11" y2="18"></line><line x1="14" x2="14" y1="11" y2="18"></line><line x1="18" x2="18" y1="11" y2="18"></line><line x1="3" x2="21" y1="22" y2="22"></line>' },
+    efectivo: { label: "Efectivo", sub: "Abonás al repartidor cuando llega", bg: "#e6efdc", fg: "#56633f", txt: "💵 Efectivo contra entrega",
+      icon: '<rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01"></path><path d="M18 12h.01"></path>' }
+  };
+
+  function waHref() {
+    var meta = PAGOS[st.pago || "efectivo"];
+    var pr = promoActiva(), desc = descuento();
+    var diaTxt = st.dia ? (dias.find(function (d) { return d.id === st.dia; }) || {}).full : null;
+    return D.mensajeWhatsApp({
+      potes: llenos(), cucu: st.cucu, vasitos: st.vasitos, nombre: st.nombre, dir: st.dir,
+      retiro: st.entrega === "retiro", mapsUrl: st.geo && st.geo.maps ? st.geo.maps : null,
+      notas: st.notas, dia: diaTxt, descuento: desc, promoLabel: desc ? pr.label : null,
+      pagoTexto: meta.txt + (st.pago === "efectivo" && st.cambio ? " (" + st.cambio + ")" : "")
+    });
+  }
+
+  /* ---------- render ---------- */
+  var lastOpen = "\u0000";
+  function render(pulse) {
+    var ll = llenos(), desc = descuento(), sub = subtotal(), env = envio(), tot = total();
+    var faltan = Math.max(0, C.envioGratisDesde - sub);
+
+    /* hero: promos */
+    $("promoChevron").classList.toggle("chev-up", st.promosOpen);
+    var pp = $("promoPanel");
+    if (st.promosOpen && pp.classList.contains("hidden")) { pp.classList.remove("hidden"); replay(pp, "anim-rise"); }
+    else if (!st.promosOpen) pp.classList.add("hidden");
+    $("heroFoto").style.height = st.promosOpen ? "0px" : "170px";
+    var pa = promoActiva();
+    $("promoSub").textContent = pa ? pa.label + " aplicada" : "2 promos activas esta semana";
+
+    /* paso 1: tamaños */
+    setHTML("sizes", D.POTES.map(function (sz) {
+      var q = st.qty[sz.key] || 0;
+      return '<div data-card="' + sz.key + '" class="flex items-center gap-3 p-[14px] rounded-[20px] border-[1.5px] transition-colors duration-200 ' + selCls(q > 0) + '">' +
+        '<img src="' + FOTOS[sz.key] + '" alt="" class="w-[62px] h-[62px] rounded-[18px] object-cover shrink-0 bg-crema saturate-[.9] contrast-[.96]">' +
+        '<div class="flex-1 flex flex-col gap-[2px]">' +
+          '<span class="text-[15px] font-bold leading-tight">' + sz.label + '</span>' +
+          '<span class="text-[11.5px] leading-snug text-arena-700">' + sz.sub + ' · hasta ' + sz.max + ' sabores</span>' +
+          '<span class="text-[13px] font-extrabold text-azul mt-[3px]">' + D.ars(sz.precio) + '</span>' +
+        '</div>' +
+        '<div class="flex items-center gap-[9px]">' +
+          '<button type="button" data-qty="' + sz.key + '" data-delta="-1" aria-label="Quitar un ' + sz.label + '" class="w-[34px] h-[34px] rounded-full border-[1.5px] border-arena-300 bg-white text-[17px] font-bold text-arena-700 cursor-pointer ' + (q ? "" : "opacity-40") + '">–</button>' +
+          '<span data-count="' + sz.key + '" class="min-w-[16px] text-center text-[15px] font-extrabold">' + q + '</span>' +
+          '<button type="button" data-qty="' + sz.key + '" data-delta="1" aria-label="Sumar un ' + sz.label + '" class="w-[34px] h-[34px] rounded-full border-0 bg-azul hover:bg-azul-dark text-white text-[17px] font-bold cursor-pointer">+</button>' +
+        '</div></div>';
+    }).join(""));
+    if (st.lastQty) {
+      replay(document.querySelector('[data-count="' + st.lastQty + '"]'), "anim-pop");
+      replay(document.querySelector('[data-card="' + st.lastQty + '"]'), "anim-flash");
+      replay(document.querySelector('[data-qty="' + st.lastQty + '"][data-delta="' + st.lastDelta + '"]'), "anim-tap");
+      st.lastQty = null;
+    }
+
+    /* paso 1: potes y sabores */
+    $("bloqueSabores").classList.toggle("hidden", st.potes.length === 0);
+    $("saboresHint").textContent = st.potes.length > 1
+      ? "Un pote a la vez: completá sus sabores y pasamos solos al siguiente."
+      : "Tocá los sabores que quieras. Podés cambiarlos cuando quieras.";
+
+    var nuevoOpen = st.open !== lastOpen; lastOpen = st.open;
+    setHTML("potes", st.potes.map(function (p, i) {
+      var done = p.flavors.length === p.max, isOpen = st.open === p.uid;
+      var faltan2 = p.max - p.flavors.length;
+      var cuerpo = "";
+      if (isOpen) {
+        cuerpo = '<div class="px-3 pb-[14px]">' +
+          '<p class="mt-0 mb-0 px-[2px] text-[11.5px] font-semibold leading-snug ' + (done ? "text-verde-700" : "text-azul") + '">' +
+          (done ? "¡Listo! Tocá un sabor elegido si querés cambiarlo."
+                : "Elegí " + faltan2 + (faltan2 === 1 ? " sabor más" : " sabores más") + " · se cierra solo al completarlo.") + '</p>' +
+          D.SECCIONES.map(function (sec) {
+          var fl = D.SABORES.filter(function (f) { return f.c === sec.key; }).map(function (f, fi) {
+            var on = p.flavors.indexOf(f.n) > -1;
+            var just = st.justPicked === p.uid + "|" + f.n;
+            return '<button type="button" data-pick="' + p.uid + '" data-flavor="' + f.n + '" style="--d:' + fi + '" class="flex items-center gap-[10px] w-full text-left py-[10px] px-[11px] rounded-2xl border-[1.5px] cursor-pointer transition-colors duration-200 ' + selCls(on) + '">' +
+              '<span class="w-[23px] h-[23px] rounded-full grid place-items-center text-xs font-extrabold shrink-0 ' + (on ? "bg-azul text-white" : "bg-arena-200 text-arena-600") + (just ? " mark-in" : "") + '">' + (on ? "✓" : "+") + '</span>' +
+              '<span class="flex flex-col gap-[1px] min-w-0"><span class="text-[13px] font-bold leading-tight">' + f.n + '</span>' +
+              '<span class="text-[10.5px] leading-snug text-arena-700">' + f.d + '</span></span></button>';
+          }).join("");
+          return '<div class="mt-3"><div class="text-[9.5px] font-extrabold tracking-[.16em] uppercase text-azul px-[2px] pb-2">' + sec.label + '</div><div class="grid gap-[7px]' + (nuevoOpen ? " stagger" : "") + '">' + fl + '</div></div>';
+        }).join("") + '</div>';
+        if (nuevoOpen) cuerpo = '<div class="acc"><div>' + cuerpo + '</div></div>';
+      }
+      var dots = "";
+      for (var k = 0; k < p.max; k++) {
+        dots += '<span class="w-[7px] h-[7px] rounded-full transition-colors duration-300 ' +
+          (k < p.flavors.length ? (done ? "bg-verde-600" : "bg-azul") : "bg-arena-300") + '"></span>';
+      }
+      var nuevo = st.nuevos && st.nuevos.indexOf(p.uid) > -1;
+      return '<div class="border-[1.5px] rounded-[22px] overflow-hidden bg-white transition-colors duration-200 ' + (nuevo ? "anim-rise " : "") + (isOpen ? "border-azul" : "border-arena-300") + '">' +
+        '<button type="button" data-pote="' + p.uid + '" class="w-full flex items-center gap-[11px] p-[14px] bg-transparent border-0 cursor-pointer text-left">' +
+          '<span class="w-[30px] h-[30px] rounded-full grid place-items-center text-xs font-extrabold shrink-0 transition-colors duration-300 ' + (done ? "bg-verde-600 text-white" : "bg-[#dbe8f1] text-azul") + '">' + (done ? "✓" : (i + 1)) + '</span>' +
+          '<span class="flex-1 flex flex-col gap-[3px]"><span class="text-sm font-bold leading-tight">Pote ' + (i + 1) + ' · ' + p.label + '</span>' +
+          '<span class="flex items-center gap-[5px]">' + dots +
+          '<span class="ml-[3px] text-[11px] font-semibold leading-snug ' + (done ? "text-verde-700" : "text-arena-600") + '">' + p.flavors.length + ' de ' + p.max + '</span></span></span>' +
+          '<span class="chev' + (isOpen ? " chev-up" : "") + ' text-arena-600 grid place-items-center">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>' +
+        '</button>' + cuerpo + '</div>';
+    }).join(""));
+    st.justPicked = null;
+    st.nuevos = null;
+
+    /* upsell */
+    var up = $("upsell");
+    if (st.upsell && up.classList.contains("hidden")) { up.classList.remove("hidden"); replay(up, "anim-rise"); }
+    else if (!st.upsell) up.classList.add("hidden");
+    if (st.upsell) {
+      up.innerHTML = '<p class="mt-0 mb-[10px] text-[12.5px] font-semibold leading-snug text-arena-800">Este pote ya está completo. ¿Sumamos otro ' + st.upsell.label + ' con ' + st.upsell.name + '?</p>' +
+        '<div class="flex gap-2"><button type="button" id="upsellYes" class="flex-1 py-[11px] border-0 rounded-full bg-azul text-white text-[12.5px] font-bold cursor-pointer">Sí, otro ' + st.upsell.label + '</button>' +
+        '<button type="button" id="upsellNo" class="py-[11px] px-4 border-[1.5px] border-arena-300 rounded-full bg-white text-[12.5px] font-semibold cursor-pointer">Dejalo así</button></div>';
+    }
+
+    var listo = ll.length > 0 && ll.length === st.potes.length;
+    var be = $("btnEntrega");
+    be.textContent = listo ? "Seguir con la entrega" : "Elegí sabores para seguir";
+    be.className = "mt-[18px] w-full py-4 border-0 rounded-full text-[15px] font-extrabold cursor-pointer transition-colors duration-200 " + (listo ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
+
+    /* paso 2 */
+    var retiro = st.entrega === "retiro";
+    $("tituloEntrega").textContent = retiro ? "¿Cuándo lo pasás a buscar?" : "¿Dónde te lo dejamos?";
+    $("modoEnvio").className = "flex flex-col gap-[3px] items-start text-left p-[13px] rounded-[20px] border-[1.5px] cursor-pointer " + selCls(!retiro);
+    $("modoRetiro").className = "flex flex-col gap-[3px] items-start text-left p-[13px] rounded-[20px] border-[1.5px] cursor-pointer " + selCls(retiro);
+    $("modoEnvio").querySelector("[data-ico]").className = "w-8 h-8 rounded-full grid place-items-center mb-[3px] " + (retiro ? "bg-arena-200 text-arena-700" : "bg-azul text-white");
+    $("modoRetiro").querySelector("[data-ico]").className = "w-8 h-8 rounded-full grid place-items-center mb-[3px] " + (retiro ? "bg-azul text-white" : "bg-arena-200 text-arena-700");
+    $("bloqueDireccion").classList.toggle("hidden", retiro);
+    $("bloqueRetiro").classList.toggle("hidden", !retiro);
+
+    var gb = $("geoBox"), g = st.geo || { s: "idle" };
+    if (retiro || g.s === "idle") {
+      gb.classList.add("hidden");
+    } else {
+      if (gb.classList.contains("hidden")) { gb.classList.remove("hidden"); replay(gb, "anim-rise"); }
+      if (g.s === "ok") {
+        gb.className = "rounded-[18px] py-3 px-[14px] text-[11.5px] font-medium leading-relaxed border-[1.5px] border-verde-600 bg-verde-200 text-verde-800";
+        gb.innerHTML = '<span class="font-bold">✓ Dirección verificada — llegamos ahí.</span><br>' +
+          (g.label ? g.label + ' · ' : '') + 'a ' + g.km.toFixed(1).replace(".", ",") + ' km del local.<br>' +
+          '<a href="' + g.maps + '" target="_blank" rel="noopener" class="font-bold text-verde-800 underline underline-offset-2">Ver en el mapa</a>';
+      } else if (g.s === "far") {
+        gb.className = "rounded-[18px] py-3 px-[14px] text-[11.5px] font-medium leading-relaxed border-[1.5px] border-rojo bg-[#fdeaea] text-[#8a2b2b]";
+        gb.innerHTML = '<span class="font-bold">Esa dirección queda a ' + g.km.toFixed(1).replace(".", ",") + ' km</span> — fuera de nuestro reparto (' + C.radioKm + ' km). ' +
+          'Podés retirarlo en el local o <a href="https://wa.me/' + C.whatsapp + '" target="_blank" rel="noopener" class="font-bold underline underline-offset-2">consultarnos por WhatsApp</a>.';
+      } else {
+        var m = GEO[g.s] || GEO.err;
+        gb.className = "rounded-[18px] py-3 px-[14px] text-[11.5px] font-medium leading-relaxed border-[1.5px] " + m.cls;
+        gb.innerHTML = (g.s === "load" ? '<span class="spinner mr-2 text-azul"></span>' : "") + m.txt;
+      }
+    }
+    $("bloqueDias").classList.toggle("hidden", !cerrado);
+    setHTML("dias", dias.map(function (d) {
+      var on = st.dia === d.id;
+      return '<button type="button" data-dia="' + d.id + '" class="py-[11px] px-[15px] rounded-full border-[1.5px] cursor-pointer text-[12.5px] font-bold transition-colors duration-200 ' + (on ? "border-azul bg-azul text-white" : "border-arena-300 bg-white text-tinta") + '">' + d.label + ' ' + d.num + '</button>';
+    }).join(""));
+
+    $("btnCucu").className = "flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left transition-colors duration-200 " + selCls(st.cucu);
+    $("btnCucu").querySelector("[data-mark]").className = "w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 transition-colors duration-200 " + (st.cucu ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
+    $("btnCucu").querySelector("[data-mark]").textContent = st.cucu ? "✓" : "+";
+    $("btnVasitos").className = "flex items-center gap-[11px] py-[13px] px-[14px] rounded-[18px] border-[1.5px] cursor-pointer text-left transition-colors duration-200 " + selCls(st.vasitos);
+    $("btnVasitos").querySelector("[data-mark]").className = "w-[22px] h-[22px] rounded-[7px] grid place-items-center text-xs font-extrabold shrink-0 transition-colors duration-200 " + (st.vasitos ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
+    $("btnVasitos").querySelector("[data-mark]").textContent = st.vasitos ? "✓" : "+";
+
+    var okEntrega = st.nombre.trim() && (retiro || st.dir.trim());
+    $("btnPago").className = "mt-[22px] w-full py-4 border-0 rounded-full text-[15px] font-extrabold cursor-pointer transition-colors duration-200 " + (okEntrega ? "bg-azul text-white" : "bg-arena-200 text-arena-600");
+    $("btnPago").textContent = okEntrega ? "Seguir al pago"
+      : !st.nombre.trim() ? "Completá tu nombre" : "Completá la dirección";
+
+    /* progreso */
+    var prog = 8;
+    if (st.potes.length) prog = 30;
+    if (listo) prog = 55;
+    if (listo && okEntrega) prog = 80;
+    if (listo && okEntrega && st.pago) prog = 100;
+    $("progFill").style.width = prog + "%";
+
+    /* header + barra */
+    setHTML("tabs", [1, 2, 3].map(function (n) {
+      var on = st.pagoOpen ? n === 3 : n === activeStep;
+      var label = ["El pote", "Entrega", "Pago"][n - 1];
+      return '<button type="button" data-tab="' + n + '" class="flex-1 flex items-center justify-center gap-[6px] py-2 px-1 rounded-full border-0 cursor-pointer transition-colors duration-200 ' + (on ? "bg-white/[.16]" : "bg-transparent") + '">' +
+        '<span class="w-[17px] h-[17px] rounded-full grid place-items-center text-[9.5px] font-extrabold transition-colors duration-200 ' + (on ? "bg-crema text-azul" : "bg-white/[.16] text-white/70") + '">' + n + '</span>' +
+        '<span class="text-[11px] font-bold transition-colors duration-200 ' + (on ? "text-white" : "text-white/60") + '">' + label + '</span></button>';
+    }).join(""));
+
+    vis($("bar"), ll.length > 0 && !st.pagoOpen, "translate-y-[140%]");
+    $("barPotes").textContent = ll.length + (ll.length === 1 ? " pote" : " potes");
+    $("barHint").textContent = desc ? "Promo aplicada · ahorrás " + D.ars(desc)
+      : st.entrega === "retiro" ? "Retirás en el local · sin costo de envío"
+      : faltan > 0 ? "Te faltan " + D.ars(faltan) + " para el envío gratis" : "Envío bonificado 🎉";
+    $("barHint").className = "text-[11px] font-medium leading-snug " + (desc || faltan === 0 || st.entrega === "retiro" ? "text-[#cfe3b4]" : "text-white/60");
+    $("barTotal").textContent = D.ars(tot);
+    if (pulse) replay($("barTotal"), "anim-pop");
+    $("barChevron").classList.toggle("chev-up", !st.detalle);
+    var bd = $("barDetalle");
+    if (st.detalle && bd.classList.contains("hidden")) { bd.classList.remove("hidden"); replay(bd, "anim-rise"); }
+    else if (!st.detalle) bd.classList.add("hidden");
+    setHTML("barDetalle", ll.map(function (p) {
+      var idx = st.potes.indexOf(p) + 1;
+      return '<button type="button" data-goto="' + p.uid + '" class="w-full text-left flex justify-between gap-[10px] items-start border-t border-white/[.16] pt-2 pb-[3px] bg-transparent border-x-0 border-b-0 cursor-pointer text-inherit hover:opacity-80 transition-opacity">' +
+        '<span class="flex flex-col gap-[2px] min-w-0"><span class="text-xs font-bold">Pote ' + idx + ' · ' + p.label + '</span>' +
+        '<span class="text-[10.5px] leading-snug opacity-70">' + (p.flavors.join(", ") || "sin sabores todavía") + '</span>' +
+        '<span class="text-[10px] font-bold text-crema mt-[2px]">Tocá para cambiar los sabores →</span></span>' +
+        '<span class="text-xs font-bold whitespace-nowrap">' + D.ars(p.precio) + '</span></button>';
+    }).join(""));
+
+    /* hoja de pago */
+    $("pagoOverlay").classList.toggle("hidden", !st.pagoOpen);
+    $("scroller").style.overflowY = st.pagoOpen ? "hidden" : "auto";
+    setHTML("pagos", Object.keys(PAGOS).map(function (id) {
+      var m = PAGOS[id], on = st.pago === id;
+      var sub = retiro && id === "efectivo" ? "Abonás al retirar en el local" : m.sub;
+      return '<button type="button" data-pago="' + id + '" class="flex items-center gap-3 p-[15px] rounded-[20px] border-[1.5px] cursor-pointer text-left transition-colors duration-200 ' + selCls(on) + '">' +
+        '<span class="w-9 h-9 rounded-full grid place-items-center shrink-0" style="background:' + m.bg + ';color:' + m.fg + '">' +
+        '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">' + m.icon + '</svg></span>' +
+        '<span class="flex-1 flex flex-col gap-[2px]"><span class="text-sm font-bold leading-tight">' + m.label + '</span>' +
+        '<span class="text-[11px] leading-snug text-arena-700">' + sub + '</span></span></button>';
+    }).join(""));
+    var dt = $("datosTransfer"), ce = $("campoEfectivo");
+    if (st.pago === "transferencia" && dt.classList.contains("hidden")) { dt.classList.remove("hidden"); replay(dt, "anim-rise"); }
+    else if (st.pago !== "transferencia") dt.classList.add("hidden");
+    if (st.pago === "efectivo" && ce.classList.contains("hidden")) { ce.classList.remove("hidden"); replay(ce, "anim-rise"); }
+    else if (st.pago !== "efectivo") ce.classList.add("hidden");
+    ce.style.display = st.pago === "efectivo" ? "flex" : "";
+
+    setHTML("resumen", [
+      { k: ll.length + (ll.length === 1 ? " pote" : " potes"), v: D.ars(D.subtotal(ll)), c: "text-white" },
+      st.cucu ? { k: "Cucuruchos", v: D.ars(C.cucuruchos), c: "text-white" } : null,
+      desc ? { k: "Promo " + pa.label, v: "–" + D.ars(desc), c: "text-[#cfe3b4]" } : null,
+      { k: retiro ? "Retiro en el local" : "Envío", v: retiro ? "Gratis" : (env ? D.ars(env) : "Bonificado"), c: env ? "text-white" : "text-[#cfe3b4]" }
+    ].filter(Boolean).map(function (r) {
+      return '<div class="flex justify-between gap-3 text-[12.5px] font-medium leading-snug text-white/[.82]"><span>' + r.k + '</span><span class="font-bold ' + r.c + '">' + r.v + '</span></div>';
+    }).join(""));
+    $("totalPago").textContent = D.ars(tot);
+
+    var bc = $("btnConfirmar");
+    bc.textContent = st.pago === "mercadopago" ? "Pagar con Mercado Pago"
+      : st.pago === "transferencia" ? "Enviar pedido por WhatsApp"
+      : st.pago === "efectivo" ? "Confirmar pedido" : "Elegí un medio de pago";
+    bc.className = "flex-1 py-[15px] border-0 rounded-full text-[14.5px] font-extrabold cursor-pointer transition-colors duration-200 " +
+      (st.pago ? (st.pago === "efectivo" ? "bg-verde-600 text-white" : "bg-rojo text-white") : "bg-arena-200 text-arena-600");
+
+    save();
+  }
+
+  /* ---------- eventos ---------- */
+  var activeStep = 1;
+
+  $("scroller").addEventListener("scroll", function () {
+    var y = this.scrollTop;
+    vis($("header"), y > 380, "-translate-y-full");
+    var nuevo = y >= $("s2").offsetTop - 300 ? 2 : 1;
+    if (nuevo !== activeStep) { activeStep = nuevo; render(); }
+  }, { passive: true });
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("button, a");
+    if (!t) return;
+    if (t.dataset.qty) { st.lastQty = t.dataset.qty; st.lastDelta = t.dataset.delta; setQty(t.dataset.qty, Number(t.dataset.delta)); return; }
+    if (t.dataset.entrega) {
+      var modo = t.dataset.entrega;
+      if (st.entrega !== modo) {
+        st.entrega = modo;
+        if (modo === "retiro") { clearTimeout(geoT); st.geo = { s: "idle" }; }
+        render(true);
+        if (!st.nombre.trim()) setTimeout(function () { $("fNombre").focus(); }, 60);
+        else if (modo === "envio") pedirVerificacion();
+      }
+      return;
+    }
+    if (t.dataset.goto) { irAPote(t.dataset.goto); return; }
+    if (t.dataset.pote) { st.open = st.open === t.dataset.pote ? null : t.dataset.pote; st.upsell = null; render(); return; }
+    if (t.dataset.pick) { pickFlavor(t.dataset.pick, t.dataset.flavor); return; }
+    if (t.dataset.promo) { aplicarPromo(D.PROMOS.find(function (p) { return p.id === t.dataset.promo; })); return; }
+    if (t.dataset.dia) { st.dia = t.dataset.dia; render(); return; }
+    if (t.dataset.pago) { st.pago = t.dataset.pago; render(); return; }
+    if (t.dataset.copy) {
+      var val = t.dataset.copy === "alias" ? C.alias : C.cvu;
+      if (navigator.clipboard) navigator.clipboard.writeText(val);
+      flash((t.dataset.copy === "alias" ? "Alias" : "CVU") + " copiado");
+      return;
+    }
+    if (t.dataset.tab) {
+      var n = Number(t.dataset.tab);
+      if (n === 3) { cerrarSheet($("pagoOverlay"), function () { st.pagoOpen = false; abrirPago(); }); return; }
+      cerrarSheet($("pagoOverlay"), function () { st.pagoOpen = false; render(); scrollTo(n === 1 ? "s1" : "s2"); });
+      return;
+    }
+    switch (t.id) {
+      case "promoToggle": st.promosOpen = !st.promosOpen; render(); break;
+      case "btnEmpezar": scrollTo("s1"); break;
+      case "btnInicio": scrollTo("s0"); break;
+      case "upsellYes": {
+        var u = st.upsell;
+        st.qty[u.key] = (st.qty[u.key] || 0) + 1;
+        st.potes = rebuild(st.qty);
+        var fresh = st.potes.filter(function (p) { return p.key === u.key; }).pop();
+        if (fresh) fresh.flavors = [u.name];
+        st.nuevos = fresh ? [fresh.uid] : null;
+        st.open = fresh ? fresh.uid : null; st.upsell = null; render(true);
+        break;
+      }
+      case "upsellNo": st.upsell = null; render(); break;
+      case "btnEntrega":
+        if (!llenos().length) { flash("Elegí al menos un sabor"); return; }
+        scrollTo("s2");
+        break;
+      case "btnCucu": st.cucu = !st.cucu; render(true); break;
+      case "btnVasitos": st.vasitos = !st.vasitos; render(); break;
+      case "btnPago": abrirPago(); break;
+      case "btnCerrarPago": case "pagoBackdrop": cerrarSheet($("pagoOverlay"), function () { st.pagoOpen = false; render(); }); break;
+      case "barToggle": st.detalle = !st.detalle; render(); break;
+      case "btnConfirmar": confirmar(); break;
+      case "btnCerrarConfirm": cerrarSheet($("confirmOverlay"), function () { $("confirmOverlay").classList.add("hidden"); }); break;
+    }
+  });
+
+  ["fNombre:nombre", "fDir:dir", "fNotas:notas", "fCambio:cambio"].forEach(function (pair) {
+    var parts = pair.split(":");
+    $(parts[0]).addEventListener("input", function () {
+      st[parts[1]] = this.value;
+      if (parts[0] === "fDir") pedirVerificacion();
+      render();
+    });
+  });
+
+  /* Cierre animado de hojas: sale la hoja, después se apaga. */
+  function cerrarSheet(el, done) {
+    if (el.classList.contains("hidden")) { done(); return; }
+    el.classList.add("closing");
+    setTimeout(function () { el.classList.remove("closing"); done(); }, 220);
+  }
+
+  function abrirPago() {
+    if (!llenos().length) { flash("Elegí al menos un sabor"); return; }
+    if (!st.nombre.trim()) { flash("Falta tu nombre"); scrollTo("s2"); $("fNombre").focus(); return; }
+    if (st.entrega === "envio") {
+      if (!st.dir.trim()) { flash("Falta la dirección"); scrollTo("s2"); $("fDir").focus(); return; }
+      var g = st.geo || {};
+      if (g.s === "load") { flash("Estamos verificando la dirección…"); scrollTo("s2"); return; }
+      if (g.s === "none" || g.s === "vago" || g.s === "idle") { flash("No pudimos ubicar esa dirección"); scrollTo("s2"); $("fDir").focus(); return; }
+      if (g.s === "far") { flash("Esa dirección queda fuera del reparto"); scrollTo("s2"); return; }
+    }
+    if (cerrado && !st.dia) { flash("Elegí el día de entrega"); scrollTo("s2"); return; }
+    st.pagoOpen = true; render();
+  }
+
+  function confirmar() {
+    if (!st.pago) { flash("Elegí un medio de pago"); return; }
+    if (st.pago === "mercadopago") {
+      $("confirmTxt").textContent = "Pagá " + D.ars(total()) + " con Mercado Pago y mandanos el detalle por WhatsApp para que lo preparemos.";
+      $("confirmWa").href = waHref();
+      cerrarSheet($("pagoOverlay"), function () {
+        st.pagoOpen = false; render();
+        $("confirmOverlay").classList.remove("hidden");
+      });
+      return;
+    }
+    window.open(waHref(), "_blank");
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (!$("confirmOverlay").classList.contains("hidden")) {
+      cerrarSheet($("confirmOverlay"), function () { $("confirmOverlay").classList.add("hidden"); });
+    } else if (st.pagoOpen) {
+      cerrarSheet($("pagoOverlay"), function () { st.pagoOpen = false; render(); });
+    }
+  });
+
+  /* ---------- init ---------- */
+  $("avisoCerrado").classList.toggle("hidden", !cerrado);
+  $("heroZonas").innerHTML = C.zonas.map(function (z) {
+    return '<span class="py-[6px] px-[11px] rounded-full bg-white/[.09] text-[11.5px] font-semibold text-white/85">' + z + '</span>';
+  }).join("");
+  $("proximoDia").textContent = dias[0] ? "el " + dias[0].full : "el jueves";
+  $("horarios").textContent = C.horarios;
+  $("retiroHorarios").textContent = "Te esperamos en el horario del local: " + C.horarios;
+  $("footerHorarios").textContent = C.horarios;
+  $("txtAlias").textContent = C.alias;
+  $("txtCvu").textContent = C.cvu;
+  $("txtTitular").textContent = C.titular;
+  $("promoPanel").innerHTML = D.PROMOS.map(function (pr) {
+    var off = Math.round((1 - pr.precio / pr.lista) * 100);
+    return '<div class="rounded-[18px] bg-white py-[13px] px-[14px] flex flex-col gap-[9px]">' +
+      '<div class="flex items-start gap-[10px]">' +
+        '<span class="flex-1 flex flex-col gap-[2px]"><span class="text-[13.5px] font-bold leading-tight text-tinta">' + pr.label + '</span>' +
+        '<span class="text-[11px] leading-snug text-arena-700">' + pr.detalle + '</span></span>' +
+        '<span class="flex flex-col items-end gap-[1px]"><span class="text-[11px] font-medium text-arena-600 line-through">' + D.ars(pr.lista) + '</span>' +
+        '<span class="font-display text-xl leading-none text-azul">' + D.ars(pr.precio) + '</span></span>' +
+      '</div>' +
+      '<div class="flex items-center gap-[9px]">' +
+        '<span class="py-[5px] px-[10px] rounded-full bg-verde-200 text-verde-800 text-[10.5px] font-extrabold">Ahorrás ' + D.ars(pr.lista - pr.precio) + ' · ' + off + '% off</span>' +
+        '<span class="flex-1"></span>' +
+        '<button type="button" data-promo="' + pr.id + '" class="py-[10px] px-4 border-0 rounded-full cursor-pointer text-xs font-extrabold bg-azul text-white">Elegir promo</button>' +
+      '</div></div>';
+  }).join("");
+
+  load();
+  $("fNombre").value = st.nombre; $("fDir").value = st.dir; $("fNotas").value = st.notas;
+  render();
+  if (st.entrega === "envio" && st.dir.trim().length >= 8) verificar();
+  if (llenos().length) setTimeout(function () { scrollTo("s1"); }, 120);
+})();
+</script>
+</body>
+</html>
